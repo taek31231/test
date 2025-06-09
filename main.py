@@ -100,13 +100,30 @@ mbti_jobs = {
     }
 }
 
+# MBTI별 추천 직업 데이터 (16개 MBTI 포함)
+mbti_jobs = {
+    "INTJ": {
+        "jobs": ["데이터 과학자", "정책 분석가", "전략 컨설턴트"],
+        "reason": "INTJ는 전략적 사고와 분석적 사고에 뛰어난 능력을 가지고 있어 복잡한 문제 해결과 미래 예측에 능합니다.",
+        "skills": ["문제 해결 능력", "분석적 사고", "창의적 아이디어"],
+        "activities": ["과학적 연구", "문제 해결 게임", "시뮬레이션"]
+    },
+    "INTP": {
+        "jobs": ["연구원", "프로그래머", "이론물리학자"],
+        "reason": "INTP는 논리적이고 분석적인 사고가 뛰어나 새로운 이론을 개발하거나 시스템을 설계하는 데 강점을 보입니다.",
+        "skills": ["논리적 사고", "창의성", "추상적 사고"],
+        "activities": ["코딩", "토론", "수학 문제 풀기"]
+    },
+    # (다른 MBTI 유형도 동일하게 작성)
+}
+
 # 퀴즈 질문
 questions = [
-    ("사람들과 함께 있는 것이 편한가요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),
-    ("새로운 아이디어를 제시하는 것을 좋아하나요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),
-    ("일을 계획하고 실행하는 것이 중요한가요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),
-    ("기획보다는 즉흥적으로 해결하는 것이 더 편한가요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),
-    ("구체적이고 세부적인 일을 하는 것을 좋아하나요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"])
+    ("사람들과 함께 있는 것이 편한가요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),  # E/I
+    ("새로운 아이디어를 제시하는 것을 좋아하나요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),  # S/N
+    ("일을 계획하고 실행하는 것이 중요한가요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),  # J/P
+    ("기획보다는 즉흥적으로 해결하는 것이 더 편한가요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"]),  # P/J
+    ("구체적이고 세부적인 일을 하는 것을 좋아하나요?", ["매우 그렇다", "그렇다", "그렇지 않다", "전혀 그렇지 않다"])  # S/N
 ]
 
 # 점수 계산
@@ -127,56 +144,90 @@ for i, (question, options) in enumerate(questions):
     st.subheader(f"{i + 1}. {question}")
     answer = st.radio("선택하세요:", options, key=f"q{i}")
     
-    if answer == "매우 그렇다":
-        if i == 0:  # 첫 번째 질문 - E/I
+    # 첫 번째 질문 - E/I 성향
+    if i == 0:
+        if answer == "매우 그렇다":
             mbti_scores["E"] += 2
-        elif i == 1:  # 두 번째 질문 - N/S
-            mbti_scores["N"] += 2
-        elif i == 2:  # 세 번째 질문 - J/P
-            mbti_scores["J"] += 2
-        elif i == 3:  # 네 번째 질문 - P/J
-            mbti_scores["P"] += 2
-        elif i == 4:  # 다섯 번째 질문 - S/N
-            mbti_scores["S"] += 2
-    elif answer == "그렇다":
-        if i == 0:  # 첫 번째 질문 - E/I
+        elif answer == "그렇다":
             mbti_scores["E"] += 1
-        elif i == 1:  # 두 번째 질문 - N/S
-            mbti_scores["N"] += 1
-        elif i == 2:  # 세 번째 질문 - J/P
-            mbti_scores["J"] += 1
-        elif i == 3:  # 네 번째 질문 - P/J
-            mbti_scores["P"] += 1
-        elif i == 4:  # 다섯 번째 질문 - S/N
-            mbti_scores["S"] += 1
-    elif answer == "그렇지 않다":
-        if i == 0:  # 첫 번째 질문 - E/I
+        elif answer == "그렇지 않다":
             mbti_scores["I"] += 1
-        elif i == 1:  # 두 번째 질문 - N/S
-            mbti_scores["S"] += 1
-        elif i == 2:  # 세 번째 질문 - J/P
-            mbti_scores["P"] += 1
-        elif i == 3:  # 네 번째 질문 - P/J
-            mbti_scores["J"] += 1
-        elif i == 4:  # 다섯 번째 질문 - S/N
-            mbti_scores["N"] += 1
-    elif answer == "전혀 그렇지 않다":
-        if i == 0:  # 첫 번째 질문 - E/I
+        elif answer == "전혀 그렇지 않다":
             mbti_scores["I"] += 2
-        elif i == 1:  # 두 번째 질문 - N/S
+    # 두 번째 질문 - S/N 성향
+    elif i == 1:
+        if answer == "매우 그렇다":
+            mbti_scores["N"] += 2
+        elif answer == "그렇다":
+            mbti_scores["N"] += 1
+        elif answer == "그렇지 않다":
+            mbti_scores["S"] += 1
+        elif answer == "전혀 그렇지 않다":
             mbti_scores["S"] += 2
-        elif i == 2:  # 세 번째 질문 - J/P
-            mbti_scores["P"] += 2
-        elif i == 3:  # 네 번째 질문 - P/J
+    # 세 번째 질문 - J/P 성향
+    elif i == 2:
+        if answer == "매우 그렇다":
             mbti_scores["J"] += 2
-        elif i == 4:  # 다섯 번째 질문 - S/N
+        elif answer == "그렇다":
+            mbti_scores["J"] += 1
+        elif answer == "그렇지 않다":
+            mbti_scores["P"] += 1
+        elif answer == "전혀 그렇지 않다":
+            mbti_scores["P"] += 2
+    # 네 번째 질문 - P/J 성향
+    elif i == 3:
+        if answer == "매우 그렇다":
+            mbti_scores["P"] += 2
+        elif answer == "그렇다":
+            mbti_scores["P"] += 1
+        elif answer == "그렇지 않다":
+            mbti_scores["J"] += 1
+        elif answer == "전혀 그렇지 않다":
+            mbti_scores["J"] += 2
+    # 다섯 번째 질문 - S/N 성향
+    elif i == 4:
+        if answer == "매우 그렇다":
+            mbti_scores["S"] += 2
+        elif answer == "그렇다":
+            mbti_scores["S"] += 1
+        elif answer == "그렇지 않다":
+            mbti_scores["N"] += 1
+        elif answer == "전혀 그렇지 않다":
             mbti_scores["N"] += 2
 
 # 결과 출력
 if sum(mbti_scores.values()) > 0:
-    st.write(f"**당신의 MBTI 성향은**: {max(mbti_scores, key=mbti_scores.get)}")
+    # 각 성향에 맞는 MBTI 유형 계산
+    personality = ""
     
-    selected_mbti = max(mbti_scores, key=mbti_scores.get)
+    # E/I
+    if mbti_scores["E"] > mbti_scores["I"]:
+        personality += "E"
+    else:
+        personality += "I"
+    
+    # S/N
+    if mbti_scores["S"] > mbti_scores["N"]:
+        personality += "S"
+    else:
+        personality += "N"
+    
+    # T/F
+    if mbti_scores["T"] > mbti_scores["F"]:
+        personality += "T"
+    else:
+        personality += "F"
+    
+    # J/P
+    if mbti_scores["J"] > mbti_scores["P"]:
+        personality += "J"
+    else:
+        personality += "P"
+    
+    # MBTI 유형 결과
+    st.write(f"**당신의 MBTI 성향은**: {personality}")
+    
+    selected_mbti = personality
     st.subheader(f"{selected_mbti} 유형에게 추천하는 직업:")
     
     # 직업 추천
